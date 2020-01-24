@@ -1,0 +1,53 @@
+#############PHP
+#############EXAMEN DIA 24/01/20 MARIO DIAZ 
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<title>Firewall Rules</title>
+</head>
+
+<body>
+	<?php
+	    
+		$nombre = htmlspecialchars($_GET['nombre']); 
+		
+		$var = "datos.ini";
+		$base = parse_ini_file($var);		
+		$php = new PDO($base["baseDeDatos"],$base["usuario"],$base["password"]);
+		
+		$con = $php->prepare("INSERT INTO encabezados VALUES (2,:tex);");
+		$con->bindParam(':tex',$nombre);
+		$con->execute();
+
+		//$resultado = $registros[0][1];
+	?>
+	<h1><?php echo "Configuraciones Firewall" ?></h1>
+	<p><?php
+$fp = fopen("C:\Users\Mario\Desktop\Firewallrule.txt", "w");
+?>  
+</p>
+
+    <p><?php
+$fp = fopen("C:\Users\Mario\Desktop\printportpw.txt", "w");
+?>  </p>
+    
+
+
+
+</body>
+
+</html>
+
+#############POWERSHELL
+#############EXAMEN DIA 24/01/20 MARIO DIAZ 
+
+#Obtener reglas del Firewall y Puertos de impresora
+
+$fw=Get-NetFirewallRule -Enabled False -PrimaryStatus OK -PolicyStoreSourceType Local
+$fw >> C:\xampp\htdocs\P001\Firewallrule.txt
+
+
+$pj= Get-PrinterPort -Name COM1: 
+$pj >> C:\xampp\htdocs\P001\printportpw.txt
