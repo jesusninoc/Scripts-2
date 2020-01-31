@@ -1,0 +1,64 @@
+#######PHP######MARIODIAZ#####
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<title>Firewall Rules</title>
+</head>
+
+<body>
+	<?php
+	    
+		$nombre = htmlspecialchars($_GET['nombre']); 
+		
+		$var = "datos.ini";
+		$base = parse_ini_file($var);		
+		$php = new PDO($base["baseDeDatos"],$base["usuario"],$base["password"]);
+		
+		$con = $php->prepare("INSERT INTO encabezados VALUES (2,:tex);");
+		$con->bindParam(':tex',$nombre);
+		$con->execute();
+
+		//$resultado = $registros[0][1];
+	?>
+	<h1><?php echo "Reglas Firewall" ?></h1>
+	<?php
+
+    
+    $file = fopen("FWrule.txt", "w");
+	fwrite($file, "$GC" . PHP_EOL);
+	fclose($file);
+
+	$file = fopen("FWrule.txt", "r");
+	
+	while(!feof($file)) {
+		echo fgets($file). "<br />";
+	}
+
+	fclose($file);
+?>
+	<p><?php
+
+	
+$fp = fopen("C:\Users\Mario\Desktop\Firewallrule.txt", "w");
+?>  
+</p>
+
+    <p><?php
+$fp = fopen("C:\Users\Mario\Desktop\printportpw.txt", "w");
+?>  </p>
+    
+
+
+
+</body>
+
+</html>
+##########POWERSHELL#########
+Get-SCPFile -LocalFile FWrule.txt -RemoteFile FWrule.txt -ComputerName 10.202.0.36 -Credential mario 
+
+##########POWERSHELL SERVER############
+$FR = Get-NetFirewallRule -Name FPS-SMB-In-TCP
+$FR >> C:\Users\Administrador\Desktop\FWrule.txt
+
