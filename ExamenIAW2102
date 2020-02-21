@@ -1,0 +1,80 @@
+####EXAMEN MARIO DIAZ ASIR 2
+
+
+######SUBIR LA IMAGEN
+#############################
+<?php
+?>
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+	<meta charset='UTF-8'>
+	<title>Subir la imagen</title>
+</head>
+<body>
+	<h1>Subir la imagen</h1>
+	<form action='query.php' method='post' enctype='multipart/form-data'>
+
+		<input type='file' name='imagen'>
+		<br>
+		<br>
+		<input type='submit' value='Upload'>
+	</form>
+</body>
+</html>
+######LEER LA IMAGEN DE LA BASE DE DATOS
+############################################
+<?php
+
+	$connect = new PDO('mysql:host=localhost;dbname=p001;charset=UTF8', 'root', '');
+
+	$connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ 
+	$consulta = "SELECT imagen FROM imagenes WHERE id='1';";
+	
+	$hacerConsulta = $connect->prepare($consulta); 
+	$hacerConsulta->execute(); 
+	$datos = $hacerConsulta->fetch(PDO::FETCH_ASSOC)["imagen"];
+	$hacerConsulta->closeCursor(); 
+ 
+	$datos = base64_decode($datos);
+	echo $datos;
+?>
+#######BASE64
+############################
+<?php
+
+	$connect = new PDO('mysql:host=localhost;dbname=p001;charset=UTF8', 'root', '');
+	$connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ 
+	
+	$datos = base64_encode(file_get_contents($_FILES['imagen']['tmp_name']));
+    
+
+
+
+    try{
+		$consulta = "INSERT INTO imagenes (";
+		$consulta .= "imagen";
+		$consulta .= ") VALUES (";
+		$consulta .= "'".$datos."');";
+    
+		$connect->query($consulta);
+
+	} catch (Exception $e) {
+		die ("La imagen no se ha subido");
+	}
+ 
+	echo "Imagen subida";
+?>
+############MOSTRAR LA IMAGEN
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Imagen</title>
+</head>
+<body>
+	<img src='upload.php'>
+</body>
+</html>
