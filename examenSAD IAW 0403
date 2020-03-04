@@ -1,0 +1,62 @@
+####MarioDiazASIR2
+###########CARGARIMAGEN (SQLI)###############
+<?php
+if(isset($_POST["submit"])){
+    $revisar = getimagesize($_FILES["image"]["tmp_name"]);
+    if($revisar !== false){
+        $image = $_FILES['image']['tmp_name'];
+        $imgContenido = addslashes(file_get_contents($image));
+        #######
+        
+    
+        ##Conexiones a MySQL
+        $Host = 'localhost';
+        $Username = 'root';
+        $Password = '';
+        $dbName = 'bdmario';
+        ####################
+        $db = new mysqli($Host, $Username, $Password, $dbName);
+        
+        
+        if($db->connect_error){
+            die("Connection failed: " . $db->connect_error);
+        }
+        
+        
+
+        $insertar = $db->query("INSERT into images_tabla (imagenes, creado) VALUES ('$imgContenido', now())");
+        
+        if($insertar){
+            echo "Imagen subida.";
+            
+        }else{
+            echo "El archivo no se ha subido.";
+        } 
+        
+    }else{
+        echo "Por favor seleccione imagen";
+    }
+}
+?>
+
+###########LOGIN###############
+<form name="MiForm" id="MiForm" method="post" action="cargarimg.php" enctype="multipart/form-data">
+	<center>
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+    
+        <h4 class="text-center">Seleccion de imagen</h4>
+        <div class="form-group">
+          <i>
+          <label class="col-sm-2 control-label">Archivos</label>
+        </i>
+          <div class="col-sm-8">
+            <input type="file" class="form-control" id="image" name="image" multiple>
+          </div>
+          <button name="submit" class="btn btn-primary">Cargar Imagen</button>
+        </div>
+      </form>
+  </center>
